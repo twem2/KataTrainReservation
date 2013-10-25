@@ -7,11 +7,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class GuidingTest {
     public static final String TRAIN_ID = "express_2000";
 
+    // FIXME will have to wire this up properly when more is implemented
+    TrainInformationService tis = new TrainInformationService() {
+        @Override
+        public Train getTrainInformation(String trainId) {
+            return null;
+        }
+    };
 
     @Test
     public void guidingTest() throws Exception {
         ReservationRequest request = new ReservationRequest(TRAIN_ID, 4);
-        Reservation reservation = new TicketOffice().makeReservation(request);
+        Reservation reservation = new TicketOffice(tis).makeReservation(request);
 
         assertThat(reservation.trainId, is(TRAIN_ID));
         assertThat(reservation.seats.size(), is(4));
