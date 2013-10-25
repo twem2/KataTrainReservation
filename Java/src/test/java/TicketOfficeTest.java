@@ -9,6 +9,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.*;
 
 public class TicketOfficeTest {
+
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
 
@@ -22,18 +23,21 @@ public class TicketOfficeTest {
     @Mock
     private TrainReservationService trainReservationService;
 
+    @Mock
+    private BookingReferenceService bookingReferenceService;
+
     private TicketOffice ticketOffice;
     private final ReservationRequest request = new ReservationRequest(TRAIN_ID, SEAT_COUNT);
 
 
     @Before
     public void setUp() throws Exception {
-        ticketOffice = new TicketOffice(trainInformationService, trainReservationService);
+        ticketOffice = new TicketOffice(trainInformationService, trainReservationService, bookingReferenceService);
     }
 
     @Test
     public void reservingReturnsANonNullReservation() throws Exception {
-        ignoring(trainInformationService, trainReservationService);
+        ignoring(trainInformationService, trainReservationService, bookingReferenceService);
 
         Reservation r = ticketOffice.makeReservation(request);
         assertThat(r, is(not(nullValue())));
@@ -41,7 +45,7 @@ public class TicketOfficeTest {
 
     @Test
     public void reservationReturnsTheTrainId() throws Exception {
-        ignoring(trainInformationService, trainReservationService);
+        ignoring(trainInformationService, trainReservationService, bookingReferenceService);
 
         Reservation r = ticketOffice.makeReservation(request);
         assertThat(r.trainId, is(TRAIN_ID));
@@ -49,7 +53,7 @@ public class TicketOfficeTest {
 
     @Test
     public void reservationReturnsTheSameNumberOfSeats() throws Exception {
-        ignoring(trainInformationService, trainReservationService);
+        ignoring(trainInformationService, trainReservationService, bookingReferenceService);
 
         Reservation r = ticketOffice.makeReservation(request);
         assertThat(r.seats.size(), is(SEAT_COUNT));
@@ -57,7 +61,7 @@ public class TicketOfficeTest {
 
     @Test
     public void weCanReserve5Seats() throws Exception {
-        ignoring(trainInformationService, trainReservationService);
+        ignoring(trainInformationService, trainReservationService, bookingReferenceService);
 
         Reservation r = ticketOffice.makeReservation(new ReservationRequest(TRAIN_ID, 5));
         assertThat(r.seats.size(), is(5));
@@ -67,6 +71,7 @@ public class TicketOfficeTest {
     public void weCanGetDetailsOfTheTrain() throws Exception {
         context.checking(new Expectations() {{
             ignoring(trainReservationService);
+            ignoring(bookingReferenceService);
 
             oneOf(trainInformationService).getTrainInformation(TRAIN_ID);
         }});
@@ -77,9 +82,23 @@ public class TicketOfficeTest {
     @Test
     public void reservationRequestsGetSubmittedToTheReservationService() throws Exception {
         context.checking(new Expectations() {{
+            ignoring(bookingReferenceService);
+
             allowing(trainInformationService).getTrainInformation(TRAIN_ID); will(returnValue(TRAIN));
 
             oneOf(trainReservationService).reserve(TRAIN);
+        }});
+
+        ticketOffice.makeReservation(new ReservationRequest(TRAIN_ID, SEAT_COUNT));
+    }
+
+    @Test
+    public void weRequestABookingReference() throws Exception {
+        context.checking(new Expectations() {{
+            ignoring(trainInformationService);
+            ignoring(trainReservationService);
+
+            oneOf(bookingReferenceService).getNewReference();
         }});
 
         ticketOffice.makeReservation(new ReservationRequest(TRAIN_ID, SEAT_COUNT));

@@ -21,11 +21,17 @@ public class GuidingTest {
             return true;
         }
     };
+    BookingReferenceService bs = new BookingReferenceService() {
+        @Override
+        public String getNewReference() {
+            return BOOKING_ID;
+        }
+    };
 
     @Test
     public void guidingTest() throws Exception {
         ReservationRequest request = new ReservationRequest(TRAIN_ID, 4);
-        Reservation reservation = new TicketOffice(tis, trs).makeReservation(request);
+        Reservation reservation = new TicketOffice(tis, trs, bs).makeReservation(request);
 
         assertThat(reservation.trainId, is(TRAIN_ID));
         assertThat(reservation.seats.size(), is(4));
