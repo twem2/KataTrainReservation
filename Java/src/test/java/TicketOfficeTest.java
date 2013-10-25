@@ -30,4 +30,10 @@ public class TicketOfficeTest {
         Reservation r = ticketOffice.makeReservation(request);
         assertThat(r.seats.size(), is(SEAT_COUNT));
     }
+
+    @Test
+    public void weCanReserve5Seats() throws Exception {
+        Reservation r = ticketOffice.makeReservation(new ReservationRequest(TRAIN_ID, 5));
+        assertThat(r.seats.size(), is(5));
+    }
 }
