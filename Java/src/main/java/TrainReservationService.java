@@ -1,3 +1,3 @@
 public interface TrainReservationService {
-    public String reserve(Train train);
+    public boolean reserve(Train train);
 }

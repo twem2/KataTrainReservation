@@ -6,6 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GuidingTest {
     public static final String TRAIN_ID = "express_2000";
+    public static final String BOOKING_ID = "75bcd15";
 
     // FIXME will have to wire this up properly when more is implemented
     TrainInformationService tis = new TrainInformationService() {
@@ -16,8 +17,8 @@ public class GuidingTest {
     };
     TrainReservationService trs = new TrainReservationService() {
         @Override
-        public String reserve(Train train) {
-            return "234324";
+        public boolean reserve(Train train) {
+            return true;
         }
     };
 
@@ -30,7 +31,7 @@ public class GuidingTest {
         assertThat(reservation.seats.size(), is(4));
 //        assertThat(reservation.seats.get(0).seatNumber, is(1));
 //        assertThat(reservation.seats.get(0).coach, is("A"));
-//        assertThat(reservation.bookingId, is("75bcd15"));
+        assertThat(reservation.bookingId, is(BOOKING_ID));
     }
 }
 

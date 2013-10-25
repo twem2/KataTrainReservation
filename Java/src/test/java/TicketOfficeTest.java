@@ -85,6 +85,8 @@ public class TicketOfficeTest {
         ticketOffice.makeReservation(new ReservationRequest(TRAIN_ID, SEAT_COUNT));
     }
 
+
+
     // utility method to ignore use of collaberators
     private void ignoring(final Object... os) {
         context.checking(new Expectations() {{
