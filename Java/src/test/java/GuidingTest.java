@@ -4,13 +4,6 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Tristan
- * Date: 10/25/13
- * Time: 10:37 AM
- * To change this template use File | Settings | File Templates.
- */
 public class GuidingTest {
     public static final String TRAIN_ID = "express_2000";
 
