@@ -3,21 +3,26 @@ import java.util.List;
 
 public class TicketOffice {
 
-    private final TrainInformationService trainService;
+    private final TrainInformationService informationService;
+    private final TrainReservationService reservationService;
 
-    public TicketOffice(TrainInformationService trainService) {
-        this.trainService = trainService;
+    public TicketOffice(TrainInformationService informationService, TrainReservationService reservationService) {
+        this.informationService = informationService;
+        this.reservationService = reservationService;
     }
 
     public Reservation makeReservation(ReservationRequest request) {
-        trainService.getTrainInformation(request.trainId);
+        Train train = informationService.getTrainInformation(request.trainId);
 
         List<Seat> seats = new LinkedList<Seat>();
         for (int i = 0; i < request.seatCount; i++) {
             seats.add(new Seat(null, 0));
         }
 
+        reservationService.reserve(train);
+
 		return new Reservation(request.trainId, seats, null);
     }
+
 
 }

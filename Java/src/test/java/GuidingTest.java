@@ -14,11 +14,17 @@ public class GuidingTest {
             return null;
         }
     };
+    TrainReservationService trs = new TrainReservationService() {
+        @Override
+        public String reserve(Train train) {
+            return "234324";
+        }
+    };
 
     @Test
     public void guidingTest() throws Exception {
         ReservationRequest request = new ReservationRequest(TRAIN_ID, 4);
-        Reservation reservation = new TicketOffice(tis).makeReservation(request);
+        Reservation reservation = new TicketOffice(tis, trs).makeReservation(request);
 
         assertThat(reservation.trainId, is(TRAIN_ID));
         assertThat(reservation.seats.size(), is(4));
