@@ -6,11 +6,22 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.*;
 
 public class TicketOfficeTest {
+
+    private static final String TRAIN_ID = "express_2000";
+    private static final int SEAT_COUNT = 4;
+
+    private final TicketOffice ticketOffice = new TicketOffice();
+    private final ReservationRequest request = new ReservationRequest(TRAIN_ID, SEAT_COUNT);
+    
     @Test
     public void reservingReturnsANonNullReservation() throws Exception {
-        Reservation r = new TicketOffice().makeReservation(null);
+        Reservation r = ticketOffice.makeReservation(request);
         assertThat(r, is(not(nullValue())));
     }
 
-
+    @Test
+    public void reservationReturnsTheTrainId() throws Exception {
+        Reservation r = ticketOffice.makeReservation(request);
+        assertThat(r.trainId, is(TRAIN_ID));
+    }
 }
