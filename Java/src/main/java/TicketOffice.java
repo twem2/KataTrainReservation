@@ -18,7 +18,6 @@ public class TicketOffice {
 
         Train train = informationService.getTrainInformation(request.trainId);
 
-
         List<Seat> seats = new LinkedList<Seat>();
         for (int i = 0; i < request.seatCount; i++) {
             seats.add(new Seat(null, 0));
@@ -26,7 +25,7 @@ public class TicketOffice {
 
         reservationService.reserve(train);
 
-		return new Reservation(request.trainId, seats, null);
+		return new Reservation(request.trainId, seats, reference);
     }
 
 

@@ -10,6 +10,7 @@ import static org.junit.Assert.*;
 
 public class TicketOfficeTest {
 
+    private static final String BOOKING_REFERENCE = "foo";
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
 
@@ -104,7 +105,19 @@ public class TicketOfficeTest {
         ticketOffice.makeReservation(new ReservationRequest(TRAIN_ID, SEAT_COUNT));
     }
 
+    @Test
+    public void weReturnTheBookinReference() throws Exception {
+        context.checking(new Expectations() {{
+            ignoring(trainInformationService);
+            ignoring(trainReservationService);
 
+            oneOf(bookingReferenceService).getNewReference(); will(returnValue(BOOKING_REFERENCE));
+        }});
+
+        Reservation r = ticketOffice.makeReservation(new ReservationRequest(TRAIN_ID, SEAT_COUNT));
+
+        assertThat(r.bookingId, is(BOOKING_REFERENCE));
+    }
 
     // utility method to ignore use of collaberators
     private void ignoring(final Object... os) {
