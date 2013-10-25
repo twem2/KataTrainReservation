@@ -24,4 +24,10 @@ public class TicketOfficeTest {
         Reservation r = ticketOffice.makeReservation(request);
         assertThat(r.trainId, is(TRAIN_ID));
     }
+
+    @Test
+    public void reservationReturnsTheSameNumberOfSeats() throws Exception {
+        Reservation r = ticketOffice.makeReservation(request);
+        assertThat(r.seats.size(), is(SEAT_COUNT));
+    }
 }
